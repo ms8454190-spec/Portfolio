@@ -714,6 +714,86 @@
     .section-title::after{transform:scaleX(1); transition:none;}
   }
 </style>
+<style id="motion-plus">
+/* ===================== MOTION+ layer ===================== */
+/* Hero ambient gold orbs */
+.hero-text{position:relative; isolation:isolate;}
+.hero-text::before,.hero-text::after{content:""; position:absolute; z-index:-1; border-radius:50%; filter:blur(70px); pointer-events:none; opacity:.55;}
+.hero-text::before{width:340px; height:340px; left:-80px; top:12%; background:radial-gradient(circle,rgba(199,151,62,.35),transparent 70%); animation:orbA 14s ease-in-out infinite alternate;}
+.hero-text::after{width:260px; height:260px; right:4%; bottom:8%; background:radial-gradient(circle,rgba(224,183,104,.22),transparent 70%); animation:orbB 18s ease-in-out infinite alternate;}
+@keyframes orbA{to{transform:translate(120px,60px) scale(1.25);}}
+@keyframes orbB{to{transform:translate(-90px,-70px) scale(.85);}}
+
+/* Hero photo: scroll parallax + slow breathing zoom (uses individual translate/scale so it never fights existing transforms) */
+.hero-media img{translate:0 var(--mx-par,0px); transition:translate .1s linear;}
+.hero-media.mx-breathe img{opacity:1; transform:none; animation:mxBreathe 16s ease-in-out infinite alternate;}
+@keyframes mxBreathe{from{scale:1;}to{scale:1.07;}}
+
+/* Rotating badge in hero */
+.mx-badge{position:absolute; right:6%; bottom:9%; width:118px; height:118px; display:grid; place-items:center; text-decoration:none; color:var(--gold-soft); z-index:3;}
+.mx-badge svg{position:absolute; inset:0; width:100%; height:100%; animation:mxSpin 16s linear infinite;}
+.mx-badge text{font:600 9.5px 'IBM Plex Sans',sans-serif; letter-spacing:3.2px; text-transform:uppercase; fill:currentColor;}
+.mx-badge .mx-arrow{width:42px; height:42px; border-radius:50%; background:var(--gold); color:#141410; display:grid; place-items:center; font-size:18px; transition:transform .35s cubic-bezier(.2,.8,.2,1);}
+.mx-badge:hover .mx-arrow{transform:rotate(-45deg) scale(1.1);}
+.mx-badge:hover svg{animation-duration:5s;}
+@keyframes mxSpin{to{transform:rotate(360deg);}}
+@media (max-width:900px){.mx-badge{width:84px; height:84px; right:4%; bottom:auto; top:112px;} .mx-badge text{font-size:7.5px;} .mx-badge .mx-arrow{width:32px; height:32px; font-size:14px;}}
+
+/* Section title word-mask reveal */
+.mx-w{display:inline-block; overflow:hidden; vertical-align:bottom; padding-bottom:.06em;}
+.mx-w > i{display:inline-block; font-style:inherit; transform:translateY(110%); transition:transform .9s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--d,0) * 70ms);}
+.mx-in .mx-w > i{transform:none;}
+
+/* Staggered pop-in for list items */
+.mx-pop{opacity:0; transform:translateY(14px) scale(.96); transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--d,0) * 55ms);}
+.mx-pop.mx-in{opacity:1; transform:none;}
+
+/* Directional reveals */
+.xp-item .reveal{transform:translateX(-36px);}
+.testimonial-card.reveal{transform:translateY(34px) scale(.95);}
+.stat.reveal{transform:translateY(26px) scale(.9);}
+.xp-item .reveal.in-view,.testimonial-card.reveal.in-view,.stat.reveal.in-view{transform:none;}
+
+/* Timeline line draws itself as you scroll */
+.mx-line{position:absolute; left:-31px; top:0; width:2px; height:var(--mx-lh,0px); background:linear-gradient(var(--gold),rgba(199,151,62,.15)); border-radius:2px; pointer-events:none; transition:height .15s linear;}
+
+/* Shine sweep on design/poster/video cards */
+.design-card,.poster-card,.video-card{--sh:-120%;}
+.mx-shine{position:relative; overflow:hidden;}
+.mx-shine::after{content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(105deg,transparent 35%,rgba(255,240,210,.22) 50%,transparent 65%); transform:translateX(-120%); transition:transform .9s cubic-bezier(.2,.8,.2,1);}
+@media (hover:hover){.mx-shine:hover::after{transform:translateX(120%);}}
+
+/* Magnetic elements */
+.mx-mag{transition:translate .45s cubic-bezier(.2,.8,.2,1);}
+.mx-mag.mx-magging{transition:translate .08s linear;}
+
+/* Pill fill-up hover */
+.pill{position:relative; overflow:hidden; isolation:isolate;}
+.pill:not(.solid)::before{content:""; position:absolute; inset:0; z-index:-1; background:var(--gold); transform:translateY(101%); transition:transform .45s cubic-bezier(.2,.8,.2,1); border-radius:inherit;}
+@media (hover:hover){.pill:not(.solid):hover{color:#141410 !important; border-color:var(--gold);} .pill:not(.solid):hover::before{transform:none;}}
+
+/* Nav link slide underline */
+.nav-links a{position:relative;}
+.nav-links a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:1px; background:var(--gold); transform:scaleX(0); transform-origin:right; transition:transform .45s cubic-bezier(.77,0,.18,1);}
+.nav-links a:hover::after{transform:scaleX(1); transform-origin:left;}
+
+/* Back to top with progress ring */
+.mx-top{position:fixed; left:22px; bottom:22px; z-index:80; width:52px; height:52px; border-radius:50%; border:0; background:rgba(20,20,22,.85); color:var(--gold-soft); cursor:pointer; display:grid; place-items:center; opacity:0; transform:translateY(16px) scale(.8); transition:opacity .35s, transform .45s cubic-bezier(.2,.8,.2,1); backdrop-filter:blur(6px);}
+.mx-top.show{opacity:1; transform:none;}
+.mx-top svg{position:absolute; inset:0; transform:rotate(-90deg);}
+.mx-top circle{fill:none; stroke-width:2;}
+.mx-top .bg{stroke:rgba(255,255,255,.08);}
+.mx-top .fg{stroke:var(--gold); stroke-dasharray:151; stroke-dashoffset:var(--mx-off,151); transition:stroke-dashoffset .1s linear;}
+.mx-top span{font-size:18px; line-height:1; transition:transform .3s;}
+.mx-top:hover span{transform:translateY(-3px);}
+
+@media (prefers-reduced-motion: reduce){
+  .hero-text::before,.hero-text::after,.mx-badge svg,.hero-media.mx-breathe img{animation:none !important;}
+  .mx-w > i,.mx-pop{transform:none !important; opacity:1 !important; transition:none !important;}
+  .hero-media img{translate:none !important;}
+}
+</style>
+
 </head>
 <body class="is-loading">
 <div class="intro" id="intro" aria-hidden="true">
@@ -2134,5 +2214,120 @@
   }
 })();
 </script>
+<script id="motion-plus-js">
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('mx-in'); io.unobserve(e.target); } });
+  }, {threshold:.15, rootMargin:'0px 0px -8% 0px'}) : null;
+  function watch(el){ if(io && !reduce) io.observe(el); else el.classList.add('mx-in'); }
+
+  /* Rotating badge in hero */
+  var ht = document.querySelector('.hero-text');
+  if(ht){
+    var a = document.createElement('a');
+    a.className = 'mx-badge'; a.href = '#contact'; a.setAttribute('aria-label','Contact Mahmoud');
+    a.innerHTML = '<svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="mxc" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text><textPath href="#mxc">Available for work ✦ Let’s talk ✦ </textPath></text></svg><span class="mx-arrow">↗</span>';
+    ht.appendChild(a);
+  }
+
+  /* Section titles: word mask reveal */
+  document.querySelectorAll('.section-title').forEach(function(t){
+    var n = 0;
+    Array.prototype.slice.call(t.childNodes).forEach(function(node){
+      if(node.nodeType !== 3 || !node.textContent.trim()) return;
+      var frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(function(w){
+        if(!w) return;
+        if(/^\s+$/.test(w)){ frag.appendChild(document.createTextNode(w)); return; }
+        var o = document.createElement('span'); o.className = 'mx-w';
+        var i = document.createElement('i'); i.textContent = w; i.style.setProperty('--d', n++);
+        o.appendChild(i); frag.appendChild(o);
+      });
+      t.replaceChild(frag, node);
+    });
+    watch(t);
+  });
+
+  /* Staggered pop-in: skills, filter buttons, tags */
+  ['.skill-group li','.xp-tags > *','.filter-btn','.hero-links .pill'].forEach(function(sel){
+    var groups = new Map();
+    document.querySelectorAll(sel).forEach(function(el){
+      var p = el.parentNode, k = groups.get(p) || 0;
+      el.classList.add('mx-pop'); el.style.setProperty('--d', k); groups.set(p, k + 1);
+      watch(el);
+    });
+  });
+
+  /* Shine sweep on cards */
+  document.querySelectorAll('.design-card, .poster-card, .video-embed').forEach(function(c){ c.classList.add('mx-shine'); });
+
+  if(reduce) return;
+
+  /* Hero photo: breathing zoom after reveal + scroll parallax */
+  var hm = document.querySelector('.hero-media');
+  if(hm){ setTimeout(function(){ hm.classList.add('mx-breathe'); }, 2600); }
+
+  /* Timeline line */
+  var xpItems = document.querySelectorAll('.xp-item');
+  var xpWrap = xpItems.length ? xpItems[0].parentNode : null, line = null;
+  if(xpWrap){
+    if(getComputedStyle(xpWrap).position === 'static') xpWrap.style.position = 'relative';
+    line = document.createElement('span'); line.className = 'mx-line';
+    var dot = xpItems[0].querySelector('.xp-dot');
+    function placeLine(){ if(!dot) return; var dr = dot.getBoundingClientRect(), wr = xpWrap.getBoundingClientRect(); line.style.left = (dr.left - wr.left + dr.width/2 - 1) + 'px'; }
+    placeLine(); window.addEventListener('resize', placeLine);
+    xpWrap.insertBefore(line, xpWrap.firstChild);
+  }
+
+  /* Back to top */
+  var top = document.createElement('button');
+  top.className = 'mx-top'; top.setAttribute('aria-label','Back to top');
+  top.innerHTML = '<svg viewBox="0 0 52 52"><circle class="bg" cx="26" cy="26" r="24"/><circle class="fg" cx="26" cy="26" r="24"/></svg><span>↑</span>';
+  top.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  document.body.appendChild(top);
+
+  /* Scroll-velocity marquee */
+  var mt = document.querySelector('.marquee-track'), anim = null;
+  function getAnim(){ if(!anim && mt && mt.getAnimations){ anim = mt.getAnimations()[0] || null; } return anim; }
+  var lastY = window.scrollY, vel = 0, ticking = false;
+
+  function frame(){
+    ticking = false;
+    var y = window.scrollY, vh = window.innerHeight, dh = document.documentElement.scrollHeight - vh;
+    vel = vel * .8 + (y - lastY) * .2; lastY = y;
+    if(hm){ var r = hm.getBoundingClientRect(); if(r.bottom > 0 && r.top < vh){ hm.style.setProperty('--mx-par', (-r.top * 0.12).toFixed(1) + 'px'); } }
+    var p = dh > 0 ? y / dh : 0;
+    top.classList.toggle('show', y > vh * .8);
+    top.style.setProperty('--mx-off', (151 - 151 * p).toFixed(1));
+    if(line && xpWrap){
+      var wr = xpWrap.getBoundingClientRect();
+      var h = Math.max(0, Math.min(wr.height, vh * .7 - wr.top));
+      line.style.setProperty('--mx-lh', h + 'px');
+    }
+    var an = getAnim();
+    if(an){ var rate = 1 + Math.min(Math.abs(vel) / 6, 5); an.playbackRate = (vel < -0.5 ? -rate : rate); }
+    if(Math.abs(vel) > .2){ ticking = true; requestAnimationFrame(frame); }
+  }
+  window.addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(frame); } }, {passive:true});
+  frame();
+
+  /* Magnetic pills / buttons (mouse only) */
+  if(fine){
+    document.querySelectorAll('.pill, .filter-btn, .explore-go, .mx-badge, .nav-links a, .mx-top, #moreVideos, #moreReviews').forEach(function(el){
+      el.classList.add('mx-mag');
+      var k = el.classList.contains('mx-badge') ? .25 : .35;
+      el.addEventListener('mousemove', function(e){
+        var r = el.getBoundingClientRect();
+        el.classList.add('mx-magging');
+        el.style.translate = ((e.clientX - r.left - r.width/2) * k).toFixed(1) + 'px ' + ((e.clientY - r.top - r.height/2) * k).toFixed(1) + 'px';
+      });
+      el.addEventListener('mouseleave', function(){ el.classList.remove('mx-magging'); el.style.translate = ''; });
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
